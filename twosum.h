@@ -122,4 +122,137 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
 	return res;
 }
 
+// Leetcode 167 Two Sum II
+// Input array is already sorted
+vector<int> twoSum2(vector<int>& numbers, int target) {
+	vector<int> res(2,0);
+	int i = 0, j = numbers.size() - 1;
+	while(i < j) {
+		if((numbers[i] + numbers[j]) == target) {
+			res[0] = i + 1;
+			res[1] = j + 1;
+			return res;
+		} else if((numbers[i] + numbers[j]) > target) {
+			j--;
+		} else {
+			i++;
+		}
+	}
+	return res;
+}
+
+// Leetcode 40 Combination Sum II 
+void backtracking_combinationSum2(vector<vector<int>>& res, vector<int>& curr, vector<int>& candidates, int target, int level) {
+	if(target == 0) {
+		res.push_back(curr);
+		return;
+	} else if(target < 0) {
+		return;
+	} else {
+		for(int i = level; i < candidates.size(); i++) {
+			curr.push_back(candidates[i]);
+			backtracking_combinationSum2(res, curr, candidates, target - candidates[i], i + 1);
+			curr.pop_back();
+			while(i < (candidates.size() - 1) && (candidates[i] == candidates[i + 1])) i++;
+		}
+	}
+}
+
+vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+	vector<vector<int>> res;
+	vector<int> curr;
+	sort(candidates.begin(), candidates.end());
+	backtracking_combinationSum2(res, curr, candidates, target, 0);
+	return res;
+}
+
+//Leetcode 39 Combination Sum
+
+void backtracking_combinationSum(vector<vector<int>>& res, vector<int>& curr, vector<int>& candidates, int target, int level) {
+	if(target == 0) {
+		res.push_back(curr);
+		return;
+	} else if(target < 0) {
+		return;
+	} else {
+		for(int i = level; i < candidates.size(); i++) {
+			curr.push_back(candidates[i]);
+			backtracking_combinationSum(res, curr, candidates, target - candidates[i], i);
+			curr.pop_back();
+			while(i < (candidates.size() - 1) && (candidates[i] == candidates[i + 1])) i++;
+		}
+	}
+}
+
+vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+	vector<vector<int>> res;
+	vector<int> curr;
+	sort(candidates.begin(),candidates.end());
+	backtracking_combinationSum(res, curr, candidates, target, 0);
+	return res;
+}
+
+// Leetcode 259: 3Sum Smaller
+
+int threeSumSmaller(vector<int>& nums, int target) {
+	int count = 0;
+	if(nums.size() < 3) return count;
+	sort(nums.begin(), nums.end());
+	for(int i = 0; i < nums.size() - 2; i++) {
+		if((nums[i] + nums[i+1] + nums[i+2]) >= target) break; 
+		int j = i + 1, k = nums.size() - 1;
+		while(j < k) {
+			int tmp_sum = nums[i] + nums[j] + nums[k];
+			if(tmp_sum >= target) {
+				k--;
+			} else {
+				count += (k - j);
+				j++;
+			}
+		}
+	} 
+	return count;
+}
+// Leetcode 216: Combination Sum III
+
+void backtracking_combinationSum3(vector<vector<int>>& res, vector<int>& curr, int k, int n, int level) {
+	if(curr.size() == k) {
+		if(n == 0) {
+			res.push_back(curr);
+		}
+		return;
+	} else if(curr.size() > k || n <= 0) {
+		return;
+	} else {
+		for(int i = level; i <= 9; i++) {
+			curr.push_back(i);
+			backtracking_combinationSum3(res, curr, k, n - i, i + 1);
+			curr.pop_back();
+		}
+	}
+}
+vector<vector<int>> combinationSum3(int k, int n) {
+	vector<vector<int>> res;
+	vector<int> curr;
+	backtracking_combinationSum3(res, curr, k, n, 1);
+	return res;
+}
+
+// Leetcode 377 Combination Sum IV
+
+
+int combinationSum4(vector<int>& nums, int target) {
+	vector<int> dp(target + 1);
+	dp[0] = 1;
+	sort(nums.begin(), nums.end());
+	for(int i = 1; i <= target; i++) {
+		for(auto num:nums){
+			if(i < num) break;
+			dp[i] += dp[i - num];
+		}
+	}
+	return dp.back();
+}
+
+
 #endif
