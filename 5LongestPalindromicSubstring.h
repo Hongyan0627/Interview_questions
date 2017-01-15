@@ -5,21 +5,33 @@
 //
 
 class Solution {
+
+private:
+	void findLongestPalindrome(string& s, int i, int j, int& maxLen, int& startPos ) {
+		
+		while(i >= 0 && j < s.length() && s[i] == s[j]) {
+			i--;
+			j++;
+		}
+
+		if(j - i - 1> maxLen) {
+			maxLen = j - i - 1;
+			startPos = i + 1;
+		}
+	}
 public:
 	string longestPalindrome(string s) {
-		if(s.empty()) return s;
-		int begin = 0, end = 0, counter = 0, d = 0, start_index = 0;
-		int count_odd = 0;
-		vector<int> mymap(128, 0);
+		int n = s.length();
+		if(n < 2) return s;
 
-		while(end < s.length()) {
-			if(mymap[s[end]] > 0) {
-				mymap[s[end]]--;
-			} else {
-				mymap[s[end]]++;
-			}
+		int maxLen = 0;
+		int startPos = 0;
 
-			
-		}   
+		for(int i = 0; i < s.length(); i++) {
+			findLongestPalindrome(s, i, i, maxLen, startPos);
+			findLongestPalindrome(s, i, i + 1, maxLen, startPos);
+		}
+
+		return s.substr(startPos, maxLen);
     }
 };
