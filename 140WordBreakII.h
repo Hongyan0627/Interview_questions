@@ -3,7 +3,7 @@
 //  Created by Hongyan on 01/17/17.
 //  Copyright © 2017 Hongyan. All rights reserved.
 //
-
+fprintf(stderr, "%s\n", );
 class Solution {
 private:
 	vector<string> dfs(unordered_set<string>& bags, unordered_map<string, vector<string>>& memory, string& s) {
