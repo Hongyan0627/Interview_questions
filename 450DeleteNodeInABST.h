@@ -6,5 +6,7 @@
 
 class Solution {
 public:
-	bool isValidBST(TreeNode* root)
+	TreeNode* deleteNode(TreeNode* root, int key) {
+		
+	}
 };
