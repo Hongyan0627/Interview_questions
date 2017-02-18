@@ -1,4 +1,5 @@
 #include <iostream>
+
 using namespace std;
 
 struct TreeNode {
@@ -9,7 +10,7 @@ struct TreeNode {
 };
 
 
-class solution {
+class Solution {
 public:
 	TreeNode* buildTree(vector<int>& nums) {
 		if(nums.empty()) return NULL;
@@ -41,23 +42,47 @@ public:
 
 	bool searchNode(TreeNode* root, int key) {
 		if(!root) return false;
-		if(root->val == key) return root;
+		if(root->val == key) return true;
 		if(root->val < key) return searchNode(root->right, key);
 		return searchNode(root->left, key);
 	}
 
-	TreeNode* deleteNode(TreeNode* root, int key) {
-		if(!searchNode(root,key)) return root;
-		TreeNode dummy(0);
-		dummy.right = root;
+	int getMin(TreeNode* node) {
+		TreeNode* curr = node;
+		while(curr->left) {
+			curr = curr->left;
+		}
+		return curr->val;
+	}
 
-		TreeNode* parent = &dummy;
-		TreeNode* curr = root;
-
-		while(curr->val != key) {
-			if(curr->val > key) {
-				curr
+	void deleteNode(TreeNode* root, TreeNode* parent, int key) {
+		if(!root) return;
+		if(root->val < key) {
+			deleteNode(root->right, root, key);
+		} else if(root->val > key) {
+			deleteNode(root->left, root, key);
+		} else {
+			if(root->left && root->right) {
+				root->val = getMin(root->right);
+				deleteNode(root->right, root, root->val);
+			} else if (parent->left == root) {
+				parent->left = (root->left) ? root->left : root->right;
+				delete root;
+			} else {
+				parent->right = (root->left) ? root->left : root->right;
+				delete root;
 			}
+		}
+	}
+
+	TreeNode* deleteNode(TreeNode* root, int key) {
+		if(!root) return NULL;
+		if(root->val == key) {
+			TreeNode dummy(0);
+			dummy.right = root;
+			deleteNode(root, &dummy, key);
+		} else {
+			deleteNode(root, NULL, key);
 		}
 	}
 };
